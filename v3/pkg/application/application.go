@@ -607,7 +607,9 @@ func (a *App) Run() error {
 		return err
 	}
 
-	a.impl = newPlatformApp(a)
+	if a.impl == nil {
+		a.impl = newPlatformApp(a)
+	}
 
 	// Ensure services are shut down in case of failures.
 	defer a.shutdownServices()
@@ -995,6 +997,9 @@ func (a *App) Clipboard() *Clipboard {
 }
 
 func (a *App) dispatchOnMainThread(fn func()) {
+	if a.impl == nil {
+		a.impl = newPlatformApp(a)
+	}
 	// If we are on the main thread, just call the function
 	if a.impl.isOnMainThread() {
 		fn()
