@@ -46,14 +46,8 @@ void* windowNew(unsigned int id, int width, int height, bool fraudulentWebsiteWa
 	delegate.windowId = id;
 
 	// Add NSView to window
-	NSView* view;
-	if ( enableHover ) {
-		view = [[HoverView alloc] initWithFrame:NSMakeRect(0, 0, width-1, height-1)];
-		[window setAcceptsMouseMovedEvents:YES];
-        [window setIgnoresMouseEvents:NO];
-	} else {
-		view = [[NSView alloc] initWithFrame:NSMakeRect(0, 0, width-1, height-1)];
-	}
+	NSView* view = [[NSView alloc] initWithFrame:NSMakeRect(0, 0, width-1, height-1)];
+
 	[view autorelease];
 
 	[view setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
@@ -106,7 +100,14 @@ void* windowNew(unsigned int id, int width, int height, bool fraudulentWebsiteWa
     [userContentController addScriptMessageHandler:delegate name:@"external"];
     config.userContentController = userContentController;
 
-	WKWebView* webView = [[WKWebView alloc] initWithFrame:frame configuration:config];
+	WKWebView* webView;
+	if ( enableHover ) {
+		webView = [[HoverWebView alloc] initWithFrame:frame configuration:config];
+		[window setAcceptsMouseMovedEvents:YES];
+        [window setIgnoresMouseEvents:NO];
+    } else {
+		webView = [[WKWebView alloc] initWithFrame:frame configuration:config];
+	}
 	[webView autorelease];
 
 	[view addSubview:webView];
