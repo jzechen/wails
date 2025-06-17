@@ -13,6 +13,7 @@ package application
 #import <WebKit/WebKit.h>
 #import <AppKit/AppKit.h>
 #import "webview_window_darwin_drag.h"
+#import "webview_window_darwin_hover.h"
 
 struct WebviewPreferences {
     bool *TabFocusesLinks;
@@ -23,7 +24,7 @@ struct WebviewPreferences {
 extern void registerListener(unsigned int event);
 
 // Create a new Window
-void* windowNew(unsigned int id, int width, int height, bool fraudulentWebsiteWarningEnabled, bool frameless, bool enableDragAndDrop, struct WebviewPreferences preferences) {
+void* windowNew(unsigned int id, int width, int height, bool fraudulentWebsiteWarningEnabled, bool frameless, bool enableDragAndDrop, struct WebviewPreferences preferences, bool enableHover) {
 	NSWindowStyleMask styleMask = NSWindowStyleMaskTitled | NSWindowStyleMaskClosable | NSWindowStyleMaskMiniaturizable | NSWindowStyleMaskResizable;
 	if (frameless) {
 		styleMask = NSWindowStyleMaskBorderless | NSWindowStyleMaskResizable;
@@ -45,7 +46,14 @@ void* windowNew(unsigned int id, int width, int height, bool fraudulentWebsiteWa
 	delegate.windowId = id;
 
 	// Add NSView to window
-	NSView* view = [[NSView alloc] initWithFrame:NSMakeRect(0, 0, width-1, height-1)];
+	NSView* view;
+	if ( enableHover ) {
+		view = [[HoverView alloc] initWithFrame:NSMakeRect(0, 0, width-1, height-1)];
+		[window setAcceptsMouseMovedEvents:YES];
+        [window setIgnoresMouseEvents:NO];
+	} else {
+		view = [[NSView alloc] initWithFrame:NSMakeRect(0, 0, width-1, height-1)];
+	}
 	[view autorelease];
 
 	[view setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
@@ -1194,6 +1202,7 @@ func (w *macosWebviewWindow) run() {
 			C.bool(options.Frameless),
 			C.bool(options.EnableDragAndDrop),
 			w.getWebviewPreferences(),
+			C.bool(options.EnableHoverTracking),
 		)
 		w.setTitle(options.Title)
 		w.setResizable(!options.DisableResize)

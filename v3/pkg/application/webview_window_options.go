@@ -139,6 +139,9 @@ type WebviewWindowOptions struct {
 
 	// IgnoreMouseEvents will ignore mouse events in the window (Windows + Mac only)
 	IgnoreMouseEvents bool
+
+	// EnableHoverTracking will enable hover tracking
+	EnableHoverTracking bool
 }
 
 type RGBA struct {
