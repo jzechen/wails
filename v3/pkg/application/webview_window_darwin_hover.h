@@ -5,4 +5,5 @@
 @end
 
 @interface HoverWebView : WKWebView
+@property(assign) unsigned int windowId;
 @end

@@ -1,4 +1,5 @@
 #import "webview_window_darwin_hover.h"
+#import "../events/events_darwin.h"
 
 @implementation HoverView
 
@@ -48,22 +49,19 @@
 }
 
 - (void)mouseEntered:(NSEvent *)event {
-    NSLog(@"🐭 HoverWebView: mouseEntered %@", NSStringFromPoint(event.locationInWindow));
+    NSLog(@"🐭 HoverWebView: mouseEntered %@, id: %u", NSStringFromPoint(event.locationInWindow), self.windowId);
     [super mouseEntered:event];
-//     [self forwardMouseEventToWebView:event];
 }
 
 - (void)mouseExited:(NSEvent *)event {
-    NSLog(@"🐭 HoverWebView: mouseExited %@", NSStringFromPoint(event.locationInWindow));
+    NSLog(@"🐭 HoverWebView: mouseExited %@, id: %u", NSStringFromPoint(event.locationInWindow), self.windowId);
     [super mouseExited:event];
-//     [self forwardMouseEventToWebView:event];
 }
 
-- (void)mouseMoved:(NSEvent *)event {
-    NSLog(@"🐭 HoverWebView: mouseMoved %@", NSStringFromPoint(event.locationInWindow));
-    [super mouseMoved:event];
-//     [self forwardMouseEventToWebView:event];
-}
+// - (void)mouseMoved:(NSEvent *)event {
+//     NSLog(@"🐭 HoverWebView: mouseMoved %@, id: %u", NSStringFromPoint(event.locationInWindow), self.windowId);
+//     [super mouseMoved:event];
+// }
 
 
 @end

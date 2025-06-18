@@ -102,7 +102,10 @@ void* windowNew(unsigned int id, int width, int height, bool fraudulentWebsiteWa
 
 	WKWebView* webView;
 	if ( enableHover ) {
-		webView = [[HoverWebView alloc] initWithFrame:frame configuration:config];
+		HoverWebView *hoverWebView = [[HoverWebView alloc] initWithFrame:frame configuration:config];
+		hoverWebView.windowId = id;
+
+		webView = hoverWebView;
 		[window setAcceptsMouseMovedEvents:YES];
         [window setIgnoresMouseEvents:NO];
     } else {
